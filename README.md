@@ -12,6 +12,8 @@ A JSX-like API for React without JSX syntax. Create React elements using functio
 npm install react-dom-functions
 ```
 
+**Note:** This library includes `clsx` as a dependency for advanced className handling. No additional installation is required.
+
 ## Quick Start
 
 ```typescript
@@ -25,7 +27,17 @@ function App() {
     { className: 'app' },
     h1('Hello World'),
     p('This is a paragraph'),
-    button({ onClick: () => setCount(count + 1) }, `Count: ${count}`)
+    button(
+      {
+        className: {
+          btn: true,
+          'btn-primary': true,
+          'btn-active': count > 0,
+        },
+        onClick: () => setCount(count + 1),
+      },
+      `Count: ${count}`
+    )
   );
 }
 ```
@@ -114,6 +126,114 @@ div('Just text content');
 
 // With multiple children without props
 div(span('First child'), span('Second child'));
+```
+
+### Advanced className with clsx
+
+The `className` prop supports clsx syntax for conditional and dynamic class names. This allows you to create complex class combinations easily:
+
+```tsx
+import { div, button, span } from 'react-dom-functions';
+
+function DynamicComponent({ isActive, size, variant }) {
+  return div(
+    {
+      className: {
+        'base-class': true,
+        active: isActive,
+        disabled: !isActive,
+        [`size-${size}`]: size,
+        [`variant-${variant}`]: variant,
+      },
+    },
+    button(
+      {
+        className: [
+          'btn',
+          'btn-primary',
+          isActive && 'btn-active',
+          size && `btn-${size}`,
+        ],
+      },
+      'Click me'
+    ),
+    span(
+      {
+        className: clsx(
+          'status',
+          isActive ? 'status-active' : 'status-inactive',
+          size && `status-${size}`
+        ),
+      },
+      isActive ? 'Active' : 'Inactive'
+    )
+  );
+}
+```
+
+#### clsx Syntax Examples
+
+**Conditional classes:**
+
+```tsx
+div(
+  {
+    className: {
+      base: true,
+      active: isActive,
+      disabled: isDisabled,
+    },
+  },
+  'Content'
+);
+```
+
+**Array syntax:**
+
+```tsx
+div(
+  {
+    className: [
+      'base-class',
+      isActive && 'active-class',
+      size && `size-${size}`,
+    ],
+  },
+  'Content'
+);
+```
+
+**Direct clsx function:**
+
+```tsx
+import clsx from 'clsx';
+
+div(
+  {
+    className: clsx(
+      'base',
+      isActive && 'active',
+      size && `size-${size}`,
+      variant && `variant-${variant}`
+    ),
+  },
+  'Content'
+);
+```
+
+**Mixed syntax:**
+
+```tsx
+div(
+  {
+    className: [
+      'base',
+      { conditional: someCondition },
+      otherCondition && 'other-class',
+    ],
+  },
+  'Content'
+);
 ```
 
 ### Fragment
