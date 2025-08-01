@@ -41,9 +41,6 @@ coverage/
 # nyc test coverage
 .nyc_output
 
-# Dependency directories
-jspm_packages/
-
 # Optional npm cache directory
 .npm
 
@@ -69,26 +66,17 @@ jspm_packages/
 .cache
 .parcel-cache
 
-# next.js build output
-.next
+# TypeScript
+*.tsbuildinfo
 
-# nuxt.js build output
-.nuxt
+# Rollup cache
+.rollup.cache/
 
-# vuepress build output
-.vuepress/dist
+# Jest cache
+.jest/
 
-# Serverless directories
-.serverless
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
+# Size limit cache
+.size-limit-cache/
 
 # Example files
 example.tsx
