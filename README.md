@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="docs/header.svg" alt="react-dom-functions" width="800" height="200">
+</div>
+
 # react-dom-functions
 
 A JSX-like API for React without JSX syntax. Create React elements using function calls instead of JSX tags. This provides a much nicer alternative to using React's `createElement` directly.

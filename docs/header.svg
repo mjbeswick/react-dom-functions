@@ -1,0 +1,87 @@
+<svg width="800" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="codeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2d3748;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a202c;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="200" fill="url(#bgGradient)"/>
+  
+  <!-- Title -->
+  <text x="400" y="50" text-anchor="middle" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="32" font-weight="bold" fill="white" filter="url(#glow)">
+    react-dom-functions
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="75" text-anchor="middle" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="16" fill="#e2e8f0">
+    JSX-like API without JSX syntax
+  </text>
+  
+  <!-- Code examples -->
+  <g transform="translate(50, 100)">
+    <!-- Left side - JSX syntax -->
+    <rect x="0" y="0" width="300" height="80" rx="8" fill="url(#codeGradient)" stroke="#4a5568" stroke-width="2"/>
+    <text x="10" y="20" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#e2e8f0">
+      &lt;div className="app"&gt;
+    </text>
+    <text x="20" y="35" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#e2e8f0">
+      &lt;h1&gt;Hello World&lt;/h1&gt;
+    </text>
+    <text x="20" y="50" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#e2e8f0">
+      &lt;p&gt;JSX Syntax&lt;/p&gt;
+    </text>
+    <text x="10" y="65" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#e2e8f0">
+      &lt;/div&gt;
+    </text>
+    
+    <!-- Arrow -->
+    <g transform="translate(320, 35)">
+      <path d="M 0 5 L 20 5 L 15 0 M 20 5 L 15 10" stroke="#f7fafc" stroke-width="2" fill="none"/>
+    </g>
+    
+    <!-- Right side - Function calls -->
+    <rect x="360" y="0" width="300" height="80" rx="8" fill="url(#codeGradient)" stroke="#48bb78" stroke-width="2"/>
+    <text x="370" y="20" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#68d391">
+      div(
+    </text>
+    <text x="380" y="35" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#68d391">
+      { className: 'app' },
+    </text>
+    <text x="380" y="50" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#68d391">
+      h1('Hello World'),
+    </text>
+    <text x="380" y="65" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#68d391">
+      p('Function Calls')
+    </text>
+    <text x="370" y="80" font-family="'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace" font-size="12" fill="#68d391">
+      )
+    </text>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="50" cy="30" r="8" fill="#f7fafc" opacity="0.3"/>
+  <circle cx="750" cy="40" r="6" fill="#f7fafc" opacity="0.3"/>
+  <circle cx="100" cy="170" r="4" fill="#f7fafc" opacity="0.3"/>
+  <circle cx="700" cy="160" r="5" fill="#f7fafc" opacity="0.3"/>
+  
+  <!-- React logo inspired element -->
+  <g transform="translate(720, 20)">
+    <circle cx="0" cy="0" r="15" fill="none" stroke="#61dafb" stroke-width="2" opacity="0.8"/>
+    <circle cx="0" cy="0" r="8" fill="#61dafb" opacity="0.6"/>
+    <circle cx="0" cy="0" r="3" fill="#61dafb"/>
+  </g>
+</svg> 
