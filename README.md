@@ -6,6 +6,8 @@
 
 A JSX-like API for React without JSX syntax. Create React elements using function calls instead of JSX tags. This provides a much nicer alternative to using React's `createElement` directly.
 
+**Inspired by [VanJS's Mini-Van](https://vanjs.org/minivan) syntax - bringing this elegant function-based approach to React and existing projects.**
+
 ## Installation
 
 ```bash
