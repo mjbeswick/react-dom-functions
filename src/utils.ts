@@ -3,7 +3,13 @@ import clsx from 'clsx';
 import type { ElementProps } from './types';
 
 // Memoized element creator for better performance
-const elementCache = new Map<string, Function>();
+const elementCache = new Map<
+  string,
+  (
+    propsOrChildren?: ElementProps | React.ReactNode,
+    ...children: React.ReactNode[]
+  ) => React.ReactElement
+>();
 
 export const createMemoizedElement = (tag: string) => {
   if (elementCache.has(tag)) {
@@ -46,8 +52,8 @@ export const createMemoizedElement = (tag: string) => {
 
 // Helper function to create multiple elements at once
 export const createElements = (tags: string[]) => {
-  const elements: Record<string, Function> = {};
-  tags.forEach(tag => {
+  const elements: Record<string, (propsOrChildren?: ElementProps | React.ReactNode, ...children: React.ReactNode[]) => React.ReactElement> = {};
+  tags.forEach((tag) => {
     elements[tag] = createMemoizedElement(tag);
   });
   return elements;
@@ -70,6 +76,8 @@ export const mapWithKeys = <T>(
 ) => {
   return items.map((item, index) => {
     const key = keyFn ? keyFn(item, index) : index;
-    return React.cloneElement(renderFn(item, index) as React.ReactElement, { key });
+    return React.cloneElement(renderFn(item, index) as React.ReactElement, {
+      key,
+    });
   });
-}; 
+};

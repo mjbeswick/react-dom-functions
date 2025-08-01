@@ -418,11 +418,11 @@ describe('HTML Elements', () => {
   describe('Performance and memory', () => {
     test('creates elements efficiently', () => {
       const startTime = performance.now();
-      const elements = Array.from({ length: 1000 }, (_, i) => 
+      Array.from({ length: 1000 }, (_, i) =>
         elements.div({ key: i }, `Element ${i}`)
       );
       const endTime = performance.now();
-      
+
       expect(endTime - startTime).toBeLessThan(100); // Should complete in under 100ms
     });
 
@@ -438,7 +438,7 @@ describe('HTML Elements', () => {
 
       const element = createNestedStructure(10);
       const { container } = render(element);
-      
+
       // Should render without errors
       expect(container.firstChild).toBeTruthy();
     });
@@ -453,7 +453,7 @@ describe('HTML Elements', () => {
       );
       const { container } = render(element);
       const button = container.firstChild as HTMLButtonElement;
-      
+
       button.click();
       expect(mockHandler).toHaveBeenCalledTimes(1);
     });
@@ -466,7 +466,7 @@ describe('HTML Elements', () => {
       const { container } = render(element);
       const form = container.firstChild as HTMLFormElement;
       const input = form.querySelector('input') as HTMLInputElement;
-      
+
       expect(form.action).toContain('/submit');
       expect(form.method).toBe('post');
       expect(input.required).toBe(true);
@@ -480,13 +480,13 @@ describe('HTML Elements', () => {
           role: 'button',
           'aria-label': 'Click me',
           'aria-pressed': false,
-          tabIndex: 0
+          tabIndex: 0,
         },
         'Accessible button'
       );
       const { container } = render(element);
       const div = container.firstChild as HTMLElement;
-      
+
       expect(div.getAttribute('role')).toBe('button');
       expect(div.getAttribute('aria-label')).toBe('Click me');
       expect(div.getAttribute('aria-pressed')).toBe('false');
@@ -500,7 +500,7 @@ describe('HTML Elements', () => {
       );
       const { container } = render(element);
       const div = container.firstChild as HTMLElement;
-      
+
       expect(div.getAttribute('data-testid')).toBe('test-element');
       expect(div.getAttribute('data-custom')).toBe('value');
     });
@@ -513,14 +513,14 @@ describe('HTML Elements', () => {
           className: [
             'base-class',
             { 'conditional-class': true, 'hidden-class': false },
-            'another-class'
-          ]
+            'another-class',
+          ],
         },
         'Content'
       );
       const { container } = render(element);
       const div = container.firstChild as HTMLElement;
-      
+
       expect(div).toHaveClass('base-class');
       expect(div).toHaveClass('conditional-class');
       expect(div).not.toHaveClass('hidden-class');
@@ -531,7 +531,7 @@ describe('HTML Elements', () => {
       const element = elements.div({ className: '' }, 'Content');
       const { container } = render(element);
       const div = container.firstChild as HTMLElement;
-      
+
       expect(div.className).toBe('');
     });
 
@@ -539,7 +539,7 @@ describe('HTML Elements', () => {
       const element = elements.div({ className: undefined }, 'Content');
       const { container } = render(element);
       const div = container.firstChild as HTMLElement;
-      
+
       expect(div.className).toBe('');
     });
   });
@@ -548,7 +548,7 @@ describe('HTML Elements', () => {
     test('handles invalid props gracefully', () => {
       // This should not throw an error
       const element = elements.div(
-        { invalidProp: 'value' } as any,
+        { invalidProp: 'value' } as Record<string, unknown>,
         'Content'
       );
       const { container } = render(element);
@@ -563,7 +563,7 @@ describe('HTML Elements', () => {
       );
       const { container } = render(element);
       const div = container.firstChild as HTMLElement;
-      
+
       div.click();
       expect(mockFunction).toHaveBeenCalledTimes(1);
     });

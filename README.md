@@ -511,6 +511,41 @@ Set up these secrets in your GitHub repository:
 
 - `NPM_TOKEN`: Your npm authentication token
 
+## Git Hooks
+
+This project uses Husky to enforce code quality with git hooks:
+
+### Pre-commit Hook
+
+- Runs linting checks
+- Performs TypeScript type checking
+- Prevents commits with code style issues
+
+### Pre-push Hook
+
+- Runs full test suite
+- Performs linting checks
+- Builds the package
+- Checks bundle size
+- Prevents pushing broken code
+
+### Setup
+
+The hooks are automatically installed when you run `npm install`. If you need to reinstall them:
+
+```bash
+npm run prepare
+```
+
+### Bypassing Hooks (Emergency Only)
+
+If you absolutely need to bypass the hooks (not recommended):
+
+```bash
+git commit --no-verify
+git push --no-verify
+```
+
 ## License
 
 MIT

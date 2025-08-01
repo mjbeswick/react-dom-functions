@@ -11,40 +11,26 @@ export type BaseElementProps = {
   className?: string | string[] | Record<string, boolean> | null | undefined;
 };
 
+// Override React's className type to support clsx
+export type ClsxClassName = string | string[] | Record<string, boolean> | null | undefined;
+
 // Specific element prop types for better type safety
-export type DivProps = BaseElementProps & React.HTMLAttributes<HTMLDivElement>;
-export type SpanProps = BaseElementProps &
-  React.HTMLAttributes<HTMLSpanElement>;
-export type ButtonProps = BaseElementProps &
-  React.ButtonHTMLAttributes<HTMLButtonElement>;
-export type InputProps = BaseElementProps &
-  React.InputHTMLAttributes<HTMLInputElement>;
-export type FormProps = BaseElementProps &
-  React.FormHTMLAttributes<HTMLFormElement>;
-export type AnchorProps = BaseElementProps &
-  React.AnchorHTMLAttributes<HTMLAnchorElement>;
-export type ImageProps = BaseElementProps &
-  React.ImgHTMLAttributes<HTMLImageElement>;
-export type ParagraphProps = BaseElementProps &
-  React.HTMLAttributes<HTMLParagraphElement>;
-export type HeadingProps = BaseElementProps &
-  React.HTMLAttributes<HTMLHeadingElement>;
-export type ListProps = BaseElementProps &
-  React.OlHTMLAttributes<HTMLOListElement> &
-  React.UlHTMLAttributes<HTMLUListElement>;
-export type ListItemProps = BaseElementProps &
-  React.LiHTMLAttributes<HTMLLIElement>;
-export type TableProps = BaseElementProps &
-  React.TableHTMLAttributes<HTMLTableElement>;
-export type TableCellProps = BaseElementProps &
-  React.TdHTMLAttributes<HTMLTableDataCellElement> &
-  React.ThHTMLAttributes<HTMLTableHeaderCellElement>;
-export type TextAreaProps = BaseElementProps &
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>;
-export type SelectProps = BaseElementProps &
-  React.SelectHTMLAttributes<HTMLSelectElement>;
-export type LabelProps = BaseElementProps &
-  React.LabelHTMLAttributes<HTMLLabelElement>;
+export type DivProps = BaseElementProps & Omit<React.HTMLAttributes<HTMLDivElement>, 'className'> & { className?: ClsxClassName };
+export type SpanProps = BaseElementProps & Omit<React.HTMLAttributes<HTMLSpanElement>, 'className'> & { className?: ClsxClassName };
+export type ButtonProps = BaseElementProps & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> & { className?: ClsxClassName };
+export type InputProps = BaseElementProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'> & { className?: ClsxClassName };
+export type FormProps = BaseElementProps & Omit<React.FormHTMLAttributes<HTMLFormElement>, 'className'> & { className?: ClsxClassName };
+export type AnchorProps = BaseElementProps & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'className'> & { className?: ClsxClassName };
+export type ImageProps = BaseElementProps & Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'className'> & { className?: ClsxClassName };
+export type ParagraphProps = BaseElementProps & Omit<React.HTMLAttributes<HTMLParagraphElement>, 'className'> & { className?: ClsxClassName };
+export type HeadingProps = BaseElementProps & Omit<React.HTMLAttributes<HTMLHeadingElement>, 'className'> & { className?: ClsxClassName };
+export type ListProps = BaseElementProps & Omit<React.OlHTMLAttributes<HTMLOListElement> & React.HTMLAttributes<HTMLUListElement>, 'className'> & { className?: ClsxClassName };
+export type ListItemProps = BaseElementProps & Omit<React.LiHTMLAttributes<HTMLLIElement>, 'className'> & { className?: ClsxClassName };
+export type TableProps = BaseElementProps & Omit<React.TableHTMLAttributes<HTMLTableElement>, 'className'> & { className?: ClsxClassName };
+export type TableCellProps = BaseElementProps & Omit<React.TdHTMLAttributes<HTMLTableDataCellElement> & React.ThHTMLAttributes<HTMLTableHeaderCellElement>, 'className'> & { className?: ClsxClassName };
+export type TextAreaProps = BaseElementProps & Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'className'> & { className?: ClsxClassName };
+export type SelectProps = BaseElementProps & Omit<React.SelectHTMLAttributes<HTMLSelectElement>, 'className'> & { className?: ClsxClassName };
+export type LabelProps = BaseElementProps & Omit<React.LabelHTMLAttributes<HTMLLabelElement>, 'className'> & { className?: ClsxClassName };
 
 // Union type for all element props
 export type ElementProps =
