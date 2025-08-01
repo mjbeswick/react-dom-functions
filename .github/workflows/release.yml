@@ -39,14 +39,15 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v7
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref_name }}
-          body: |
-            ## What's Changed
+          script: |
+            const { data: release } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: context.ref.replace('refs/tags/', ''),
+              name: `Release ${context.ref.replace('refs/tags/v', '')}`,
+              body: `## What's Changed
 
             ### Features
             - JSX-like API for React without JSX syntax
@@ -56,12 +57,12 @@ jobs:
             - Tree-shaking friendly
 
             ### Installation
-            ```bash
+            \`\`\`bash
             npm install react-dom-functions
-            ```
+            \`\`\`
 
             ### Quick Start
-            ```typescript
+            \`\`\`typescript
             import { div, h1, p, button } from 'react-dom-functions';
 
             function App() {
@@ -72,6 +73,7 @@ jobs:
                 button({ onClick: () => console.log('clicked') }, 'Click me')
               );
             }
-            ```
-          draft: false
-          prerelease: false
+            \`\`\``,
+              draft: false,
+              prerelease: false
+            });

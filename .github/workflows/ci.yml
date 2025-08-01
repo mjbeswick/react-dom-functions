@@ -82,25 +82,27 @@ jobs:
           git push origin main --tags
 
       - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v7
         with:
-          tag_name: v${{ steps.bump.outputs.new_version }}
-          release_name: Release v${{ steps.bump.outputs.new_version }}
-          body: |
-            ## Release v${{ steps.bump.outputs.new_version }}
+          script: |
+            const { data: release } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `v${steps.bump.outputs.new_version}`,
+              name: `Release v${steps.bump.outputs.new_version}`,
+              body: `## Release v${steps.bump.outputs.new_version}
 
             ### What's Changed
             - Automated release from main branch
-            - Version bumped from ${{ steps.bump.outputs.current_version }} to ${{ steps.bump.outputs.new_version }}
+            - Version bumped from ${steps.bump.outputs.current_version} to ${steps.bump.outputs.new_version}
 
             ### Installation
-            ```bash
-            npm install react-dom-functions@${{ steps.bump.outputs.new_version }}
-            ```
-          draft: false
-          prerelease: false
+            \`\`\`bash
+            npm install react-dom-functions@${steps.bump.outputs.new_version}
+            \`\`\``,
+              draft: false,
+              prerelease: false
+            });
 
   publish:
     needs: version-bump
