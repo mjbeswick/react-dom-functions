@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/header.svg" alt="react-dom-functions" width="800" height="200">
+  <img src="https://raw.githubusercontent.com/mjbeswick/react-dom-functions/main/docs/header.svg" alt="react-dom-functions" width="800" height="200">
 </div>
 
 # react-dom-functions
