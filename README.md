@@ -461,6 +461,56 @@ npm run size
 npm run lint
 ```
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+### Automated Workflows
+
+1. **CI Pipeline** (`ci.yml`)
+
+   - Runs on every push to `main` and pull requests
+   - Tests against Node.js 18.x and 20.x
+   - Runs linting, tests, and bundle size checks
+   - Publishes to npm on successful pushes to main (if version doesn't exist)
+
+2. **Release Workflow** (`release.yml`)
+
+   - Triggers when you push a tag (e.g., `v1.0.1`)
+   - Runs full test suite
+   - Publishes to npm
+   - Creates GitHub release with changelog
+
+3. **Version Bump** (`version-bump.yml`)
+   - Automatically bumps patch version on pushes to main
+   - Creates git tags and GitHub releases
+   - Skips documentation-only changes
+
+### Publishing to npm
+
+To publish a new version:
+
+**Manual Release:**
+
+```bash
+# Bump version
+npm version patch|minor|major
+
+# Push with tag
+git push origin main --tags
+```
+
+**Automatic Release:**
+
+- Push to main branch (automatically bumps patch version)
+- Or push a tag for specific version control
+
+### Required Secrets
+
+Set up these secrets in your GitHub repository:
+
+- `NPM_TOKEN`: Your npm authentication token
+
 ## License
 
 MIT

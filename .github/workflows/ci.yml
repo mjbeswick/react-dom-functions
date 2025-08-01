@@ -45,6 +45,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -59,7 +61,19 @@ jobs:
       - name: Build package
         run: npm run build
 
+      - name: Check if version exists on npm
+        id: check-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          npm view react-dom-functions@$VERSION version > /dev/null 2>&1 && echo "exists=true" >> $GITHUB_OUTPUT || echo "exists=false" >> $GITHUB_OUTPUT
+
       - name: Publish to npm
-        run: npm publish
+        if: steps.check-version.outputs.exists == 'false'
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Skip publish (version already exists)
+        if: steps.check-version.outputs.exists == 'true'
+        run: echo "Version ${{ steps.check-version.outputs.version }} already exists on npm, skipping publish"
