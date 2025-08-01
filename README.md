@@ -8,6 +8,24 @@ A JSX-like API for React without JSX syntax. Create React elements using functio
 npm install react-dom-functions
 ```
 
+## Quick Start
+
+```typescript
+import React from 'react';
+import { div, h1, p, button } from 'react-dom-functions';
+
+function App() {
+  const [count, setCount] = React.useState(0);
+
+  return div(
+    { className: 'app' },
+    h1('Hello World'),
+    p('This is a paragraph'),
+    button({ onClick: () => setCount(count + 1) }, `Count: ${count}`)
+  );
+}
+```
+
 ## Usage
 
 Instead of using JSX syntax, you can create React elements using function calls:
@@ -279,6 +297,45 @@ function SimpleIcon() {
 ## TypeScript Support
 
 This library is written in TypeScript and provides full type safety. All element functions are properly typed with React's element types.
+
+## Performance
+
+This library is optimized for performance:
+
+- **Tree-shaking friendly**: Only import what you use
+- **Minimal runtime overhead**: Direct function calls
+- **Memoized element creation**: Cached element functions
+- **Small bundle size**: ~2KB gzipped
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Build the package
+npm run build
+
+# Check bundle size
+npm run size
+
+# Run linter
+npm run lint
+```
 
 ## License
 

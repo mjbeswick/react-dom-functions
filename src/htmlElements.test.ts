@@ -413,4 +413,159 @@ describe('HTML Elements', () => {
       );
     });
   });
+
+  // New comprehensive test sections
+  describe('Performance and memory', () => {
+    test('creates elements efficiently', () => {
+      const startTime = performance.now();
+      const elements = Array.from({ length: 1000 }, (_, i) => 
+        elements.div({ key: i }, `Element ${i}`)
+      );
+      const endTime = performance.now();
+      
+      expect(endTime - startTime).toBeLessThan(100); // Should complete in under 100ms
+    });
+
+    test('handles large nested structures', () => {
+      const createNestedStructure = (depth: number): React.ReactElement => {
+        if (depth === 0) return elements.span('Leaf');
+        return elements.div(
+          { className: `level-${depth}` },
+          createNestedStructure(depth - 1),
+          createNestedStructure(depth - 1)
+        );
+      };
+
+      const element = createNestedStructure(10);
+      const { container } = render(element);
+      
+      // Should render without errors
+      expect(container.firstChild).toBeTruthy();
+    });
+  });
+
+  describe('Type safety', () => {
+    test('handles proper event handlers', () => {
+      const mockHandler = jest.fn();
+      const element = elements.button(
+        { onClick: mockHandler, type: 'button' },
+        'Click me'
+      );
+      const { container } = render(element);
+      const button = container.firstChild as HTMLButtonElement;
+      
+      button.click();
+      expect(mockHandler).toHaveBeenCalledTimes(1);
+    });
+
+    test('handles proper form attributes', () => {
+      const element = elements.form(
+        { action: '/submit', method: 'post' },
+        elements.input({ type: 'text', name: 'test', required: true })
+      );
+      const { container } = render(element);
+      const form = container.firstChild as HTMLFormElement;
+      const input = form.querySelector('input') as HTMLInputElement;
+      
+      expect(form.action).toContain('/submit');
+      expect(form.method).toBe('post');
+      expect(input.required).toBe(true);
+    });
+  });
+
+  describe('Accessibility', () => {
+    test('handles ARIA attributes', () => {
+      const element = elements.div(
+        {
+          role: 'button',
+          'aria-label': 'Click me',
+          'aria-pressed': false,
+          tabIndex: 0
+        },
+        'Accessible button'
+      );
+      const { container } = render(element);
+      const div = container.firstChild as HTMLElement;
+      
+      expect(div.getAttribute('role')).toBe('button');
+      expect(div.getAttribute('aria-label')).toBe('Click me');
+      expect(div.getAttribute('aria-pressed')).toBe('false');
+      expect(div.getAttribute('tabindex')).toBe('0');
+    });
+
+    test('handles data attributes', () => {
+      const element = elements.div(
+        { 'data-testid': 'test-element', 'data-custom': 'value' },
+        'Test content'
+      );
+      const { container } = render(element);
+      const div = container.firstChild as HTMLElement;
+      
+      expect(div.getAttribute('data-testid')).toBe('test-element');
+      expect(div.getAttribute('data-custom')).toBe('value');
+    });
+  });
+
+  describe('CSS class handling', () => {
+    test('handles clsx syntax correctly', () => {
+      const element = elements.div(
+        {
+          className: [
+            'base-class',
+            { 'conditional-class': true, 'hidden-class': false },
+            'another-class'
+          ]
+        },
+        'Content'
+      );
+      const { container } = render(element);
+      const div = container.firstChild as HTMLElement;
+      
+      expect(div).toHaveClass('base-class');
+      expect(div).toHaveClass('conditional-class');
+      expect(div).not.toHaveClass('hidden-class');
+      expect(div).toHaveClass('another-class');
+    });
+
+    test('handles empty className', () => {
+      const element = elements.div({ className: '' }, 'Content');
+      const { container } = render(element);
+      const div = container.firstChild as HTMLElement;
+      
+      expect(div.className).toBe('');
+    });
+
+    test('handles undefined className', () => {
+      const element = elements.div({ className: undefined }, 'Content');
+      const { container } = render(element);
+      const div = container.firstChild as HTMLElement;
+      
+      expect(div.className).toBe('');
+    });
+  });
+
+  describe('Error handling', () => {
+    test('handles invalid props gracefully', () => {
+      // This should not throw an error
+      const element = elements.div(
+        { invalidProp: 'value' } as any,
+        'Content'
+      );
+      const { container } = render(element);
+      expect(container.firstChild).toBeTruthy();
+    });
+
+    test('handles function props', () => {
+      const mockFunction = jest.fn();
+      const element = elements.div(
+        { onClick: mockFunction, onMouseEnter: mockFunction },
+        'Content'
+      );
+      const { container } = render(element);
+      const div = container.firstChild as HTMLElement;
+      
+      div.click();
+      expect(mockFunction).toHaveBeenCalledTimes(1);
+    });
+  });
 });
