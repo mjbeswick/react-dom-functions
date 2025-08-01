@@ -9,7 +9,7 @@ type ElementProps = {
    * Accepts clsx syntax for conditional and dynamic class names.
    * See: https://github.com/lukeed/clsx
    */
-  className?: string | string[] | Record<string, boolean> | null | undefined;
+  className?: Parameters<typeof clsx>[0];
 };
 
 // Helper function to create element functions

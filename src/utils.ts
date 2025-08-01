@@ -52,7 +52,13 @@ export const createMemoizedElement = (tag: string) => {
 
 // Helper function to create multiple elements at once
 export const createElements = (tags: string[]) => {
-  const elements: Record<string, (propsOrChildren?: ElementProps | React.ReactNode, ...children: React.ReactNode[]) => React.ReactElement> = {};
+  const elements: Record<
+    string,
+    (
+      propsOrChildren?: ElementProps | React.ReactNode,
+      ...children: React.ReactNode[]
+    ) => React.ReactElement
+  > = {};
   tags.forEach((tag) => {
     elements[tag] = createMemoizedElement(tag);
   });
