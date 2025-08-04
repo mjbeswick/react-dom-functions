@@ -1,6 +1,6 @@
 {
   "name": "react-dom-functions",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A JSX-like API for React without JSX syntax",
   "type": "module",
   "main": "./dist/index.js",
