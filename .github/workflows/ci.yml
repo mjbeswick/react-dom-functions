@@ -88,17 +88,17 @@ jobs:
             const { data: release } = await github.rest.repos.createRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              tag_name: `v${steps.bump.outputs.new_version}`,
-              name: `Release v${steps.bump.outputs.new_version}`,
-              body: `## Release v${steps.bump.outputs.new_version}
+              tag_name: `v${{ steps.bump.outputs.new_version }}`,
+              name: `Release v${{ steps.bump.outputs.new_version }}`,
+              body: `## Release v${{ steps.bump.outputs.new_version }}
 
             ### What's Changed
             - Automated release from main branch
-            - Version bumped from ${steps.bump.outputs.current_version} to ${steps.bump.outputs.new_version}
+            - Version bumped from ${{ steps.bump.outputs.current_version }} to ${{ steps.bump.outputs.new_version }}
 
             ### Installation
             \`\`\`bash
-            npm install react-dom-functions@${steps.bump.outputs.new_version}
+            npm install react-dom-functions@${{ steps.bump.outputs.new_version }}
             \`\`\``,
               draft: false,
               prerelease: false
