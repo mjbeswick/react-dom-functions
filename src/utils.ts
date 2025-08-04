@@ -87,3 +87,74 @@ export const mapWithKeys = <T>(
     });
   });
 };
+
+/**
+ * Creates a function-based wrapper for React components
+ * @param Component - The React component to wrap
+ * @returns A function that can be called like other DOM element functions
+ */
+export const asComponentFn = <Props extends Record<string, unknown>>(
+  Component: React.ComponentType<Props>
+) => {
+  return (
+    propsOrChildren?: Props | React.ReactNode,
+    ...children: React.ReactNode[]
+  ) => {
+    // If the first argument is not an object (i.e., it's a child), treat it as children
+    if (
+      propsOrChildren &&
+      typeof propsOrChildren === 'object' &&
+      !React.isValidElement(propsOrChildren) &&
+      !Array.isArray(propsOrChildren)
+    ) {
+      // First argument is props
+      const props = propsOrChildren as Props;
+      return React.createElement(Component, props, ...children);
+    } else {
+      // First argument is a child, no props
+      return React.createElement(
+        Component,
+        {} as Props,
+        propsOrChildren,
+        ...children
+      );
+    }
+  };
+};
+
+/**
+ * Creates a function-based wrapper for React components with children support
+ * @param Component - The React component to wrap
+ * @returns A function that can be called like other DOM element functions
+ */
+export const asComponentFnWithChildren = <
+  Props extends Record<string, unknown>
+>(
+  Component: React.ComponentType<Props & { children?: React.ReactNode }>
+) => {
+  return (
+    propsOrChildren?:
+      | (Props & { children?: React.ReactNode })
+      | React.ReactNode,
+    ...children: React.ReactNode[]
+  ) => {
+    // If the first argument is not an object (i.e., it's a child), treat it as children
+    if (
+      propsOrChildren &&
+      typeof propsOrChildren === 'object' &&
+      !React.isValidElement(propsOrChildren) &&
+      !Array.isArray(propsOrChildren)
+    ) {
+      // First argument is props
+      const props = propsOrChildren as Props & { children?: React.ReactNode };
+      return React.createElement(Component, props, ...children);
+    } else {
+      // First argument is a child, no props
+      return React.createElement(
+        Component,
+        { children: propsOrChildren } as Props & { children?: React.ReactNode },
+        ...children
+      );
+    }
+  };
+};
