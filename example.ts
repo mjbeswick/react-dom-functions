@@ -1,14 +1,24 @@
 import React from 'react';
-import { div, h1, p, button, ul, li, span } from 'react-dom-functions';
+import { div, h1, p, button, ul, li, span } from './src/htmlElements';
+import { DOMFC } from './src/types';
 
-function ExampleComponent() {
+type ExampleComponentProps = {
+  title?: string;
+  description?: string;
+  items?: string[];
+};
+
+const ExampleComponent: DOMFC<ExampleComponentProps> = ({
+  title = 'React HTML Elements Example',
+  description = 'This is an example of using the library',
+  items = ['Item 1', 'Item 2', 'Item 3'],
+}) => {
   const [count, setCount] = React.useState(0);
-  const items = ['Item 1', 'Item 2', 'Item 3'];
 
   return div(
     { className: 'container' },
-    h1({ className: 'title' }, 'React HTML Elements Example'),
-    p({ className: 'description' }, 'This is an example of using the library'),
+    h1({ className: 'title' }, title),
+    p({ className: 'description' }, description),
 
     div(
       { className: 'counter-section' },
@@ -33,6 +43,6 @@ function ExampleComponent() {
       )
     )
   );
-}
+};
 
 export default ExampleComponent;

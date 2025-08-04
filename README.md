@@ -6,7 +6,6 @@
 
 react-dom-functions offers a JSX-like API for React, allowing you to build React elements using simple function calls rather than JSX tags. This approach streamlines your code and eliminates the need for a build step or JSX transpilation, making it especially useful for environments where JSX is not available or desired. By providing a set of functions corresponding to standard HTML elements (such as `div`, `span`, `button`, etc.), you can construct your component trees in a more readable and maintainable way compared to using `React.createElement` directly. This results in cleaner code, improved type safety (especially with TypeScript), and a more ergonomic developer experience when working with React without JSX.
 
-
 ## Installation
 
 ```bash
@@ -19,10 +18,15 @@ npm install react-dom-functions
 
 ```typescript
 import React from 'react';
-import { div, h1, p, button } from 'react-dom-functions';
+import { div, h1, p, button, DOMFC } from 'react-dom-functions';
 
-function App() {
-  const [count, setCount] = React.useState(0);
+type AppProps = {
+  initialCount?: number;
+};
+
+// Use DOMFC instead of React.FC for components that return DOM elements
+const App: DOMFC<AppProps> = ({ initialCount = 0 }) => {
+  const [count, setCount] = React.useState(initialCount);
 
   return div(
     { className: 'app' },
@@ -40,7 +44,7 @@ function App() {
       `Count: ${count}`
     )
   );
-}
+};
 ```
 
 ## Usage
@@ -48,22 +52,28 @@ function App() {
 Instead of using JSX syntax, you can create React elements using function calls:
 
 ```tsx
-import { div, h1, p, button } from 'react-dom-functions';
+import { div, h1, p, button, DOMFC } from 'react-dom-functions';
 
-function MyComponent() {
+type MyComponentProps = {
+  title: string;
+  description: string;
+};
+
+// Use DOMFC instead of React.FC for components that return DOM elements
+const MyComponent: DOMFC<MyComponentProps> = ({ title, description }) => {
   return div(
     { className: 'container' },
-    h1({ className: 'title' }, 'Hello World'),
-    p({ className: 'description' }, 'This is a paragraph'),
+    h1({ className: 'title' }, title),
+    p({ className: 'description' }, description),
     button(
       {
         className: 'btn',
         onClick: () => console.log('clicked'),
-      },`
+      },
       'Click me'
     )
   );
-}
+};
 ```
 
 ## Why Pure TypeScript Over JSX/TSX?
@@ -99,6 +109,136 @@ While JSX and TSX are popular for React development, using pure TypeScript with 
 - **Programmatic Creation**: Easier to generate elements programmatically
 - **Dynamic Components**: More straightforward to create components based on data or conditions
 - **Template Systems**: Better integration with template engines and code generation tools
+
+## DOMFC Type
+
+The `DOMFC` type is a specialized React function component type designed for components that return DOM elements using the function-based API. **Use `DOMFC` wherever you would normally use `React.FC`** when building components with this library. It provides better type safety and IntelliSense support compared to the standard `React.FC`.
+
+### Basic Usage
+
+```tsx
+import { div, span, DOMFC } from 'react-dom-functions';
+
+type CardProps = {
+  title: string;
+  content: string;
+  variant?: 'primary' | 'secondary';
+};
+
+// DOMFC replaces React.FC for function-based DOM components
+const Card: DOMFC<CardProps> = ({ title, content, variant = 'primary' }) => {
+  return div(
+    {
+      className: {
+        card: true,
+        [`card--${variant}`]: true,
+      },
+    },
+    span({ className: 'card__title' }, title),
+    span({ className: 'card__content' }, content)
+  );
+};
+```
+
+### With Children
+
+The `DOMFC` type automatically includes support for children:
+
+```tsx
+import { div, DOMFC } from 'react-dom-functions';
+
+type ContainerProps = {
+  padding?: 'small' | 'medium' | 'large';
+};
+
+// Use DOMFC instead of React.FC for better children support
+const Container: DOMFC<ContainerProps> = ({ padding = 'medium', children }) => {
+  return div(
+    {
+      className: {
+        container: true,
+        [`container--${padding}`]: true,
+      },
+    },
+    children
+  );
+};
+```
+
+### Advanced Component Patterns
+
+```tsx
+import { div, button, span, DOMFC } from 'react-dom-functions';
+
+type ButtonProps = {
+  variant: 'primary' | 'secondary' | 'danger';
+  size?: 'small' | 'medium' | 'large';
+  disabled?: boolean;
+  onClick?: () => void;
+};
+
+// DOMFC provides better type safety than React.FC for DOM components
+const Button: DOMFC<ButtonProps> = ({
+  variant,
+  size = 'medium',
+  disabled = false,
+  onClick,
+  children,
+}) => {
+  return button(
+    {
+      className: {
+        btn: true,
+        [`btn--${variant}`]: true,
+        [`btn--${size}`]: true,
+        'btn--disabled': disabled,
+      },
+      disabled,
+      onClick: disabled ? undefined : onClick,
+    },
+    children
+  );
+};
+```
+
+### When to Use DOMFC
+
+**Replace `React.FC` with `DOMFC`** in the following scenarios:
+
+- **Function Components**: Any component that returns DOM elements using this library
+- **Type Safety**: When you want better type checking for DOM element returns
+- **Consistent API**: To maintain consistency with the function-based approach
+- **Children Support**: When your component needs to handle children properly
+
+### React.FC vs DOMFC Comparison
+
+```tsx
+// ❌ Don't use React.FC with this library
+const MyComponent: React.FC<MyProps> = ({ title }) => {
+  return div({ className: 'container' }, title);
+};
+
+// ✅ Use DOMFC instead
+const MyComponent: DOMFC<MyProps> = ({ title }) => {
+  return div({ className: 'container' }, title);
+};
+```
+
+**Key Differences:**
+
+- `DOMFC` is specifically designed for components that return DOM elements
+- `DOMFC` provides better type safety for the function-based API
+- `DOMFC` automatically includes proper children typing
+- `DOMFC` matches the library's function-based approach
+
+### Benefits of Using DOMFC
+
+- **Type Safety**: Ensures your component returns a DOM element
+- **Better IntelliSense**: Provides accurate autocomplete for props and children
+- **Consistent API**: Matches the function-based approach of the library
+- **Children Support**: Automatically includes proper typing for children
+- **IDE Integration**: Better refactoring and error detection
+- **React.FC Replacement**: Drop-in replacement for React.FC with enhanced DOM support
 
 ## API
 
@@ -260,16 +400,32 @@ import {
   textarea,
   select,
   option,
+  div,
+  DOMFC,
 } from 'react-dom-functions';
 
-function ContactForm() {
+type ContactFormProps = {
+  onSubmit?: (data: { name: string; message: string }) => void;
+};
+
+const ContactForm: DOMFC<ContactFormProps> = ({ onSubmit }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    onSubmit?.({
+      name: formData.get('name') as string,
+      message: formData.get('message') as string,
+    });
+  };
+
   return form(
-    { onSubmit: (e) => e.preventDefault() },
+    { onSubmit: handleSubmit },
     div(
       { className: 'form-group' },
       label({ htmlFor: 'name' }, 'Name:'),
       input({
         id: 'name',
+        name: 'name',
         type: 'text',
         placeholder: 'Enter your name',
       })
@@ -279,71 +435,100 @@ function ContactForm() {
       label({ htmlFor: 'message' }, 'Message:'),
       textarea({
         id: 'message',
+        name: 'message',
         rows: 4,
         placeholder: 'Enter your message',
       })
     ),
     button({ type: 'submit' }, 'Submit')
   );
-}
+};
 ```
 
 ### Lists
 
 ```tsx
-import { ul, ol, li } from 'react-dom-functions';
+import { ul, ol, li, DOMFC } from 'react-dom-functions';
 
-function TodoList() {
-  const todos = ['Learn React', 'Build app', 'Deploy'];
+type TodoListProps = {
+  todos: string[];
+  onTodoClick?: (todo: string, index: number) => void;
+};
 
+const TodoList: DOMFC<TodoListProps> = ({ todos, onTodoClick }) => {
   return ul(
     { className: 'todo-list' },
     ...todos.map((todo, index) =>
-      li({ key: index, className: 'todo-item' }, todo)
+      li(
+        {
+          key: index,
+          className: 'todo-item',
+          onClick: () => onTodoClick?.(todo, index),
+        },
+        todo
+      )
     )
   );
-}
+};
 ```
 
 ### Tables
 
 ```tsx
-import { table, thead, tbody, tr, th, td } from 'react-dom-functions';
+import { table, thead, tbody, tr, th, td, DOMFC } from 'react-dom-functions';
 
-function DataTable() {
-  const data = [
-    { name: 'John', age: 30 },
-    { name: 'Jane', age: 25 },
-  ];
+type Person = {
+  name: string;
+  age: number;
+};
 
+type DataTableProps = {
+  data: Person[];
+  onRowClick?: (person: Person, index: number) => void;
+};
+
+const DataTable: DOMFC<DataTableProps> = ({ data, onRowClick }) => {
   return table(
     { className: 'data-table' },
     thead(tr(th('Name'), th('Age'))),
     tbody(
       ...data.map((row, index) =>
-        tr({ key: index }, td(row.name), td(row.age.toString()))
+        tr(
+          {
+            key: index,
+            onClick: () => onRowClick?.(row, index),
+            className: 'table-row',
+          },
+          td(row.name),
+          td(row.age.toString())
+        )
       )
     )
   );
-}
+};
 ```
 
 ### SVG Elements
 
 ```tsx
-import { svg, circle, rect, path } from 'react-dom-functions';
+import { svg, circle, rect, path, DOMFC } from 'react-dom-functions';
 
-function SimpleIcon() {
+type SimpleIconProps = {
+  size?: number;
+  color?: string;
+};
+
+const SimpleIcon: DOMFC<SimpleIconProps> = ({ size = 100, color = 'blue' }) => {
   return svg(
-    { width: 100, height: 100, viewBox: '0 0 100 100' },
+    { width: size, height: size, viewBox: `0 0 ${size} ${size}` },
     circle({
-      cx: 50,
-      cy: 50,
-      r: 40,
-      fill: 'blue',
+      cx: size / 2,
+      cy: size / 2,
+      r: size * 0.4,
+      fill: color,
     })
   );
-}
+};
 ```
 
 ## Available Elements
@@ -423,6 +608,8 @@ function SimpleIcon() {
 
 This library is written in TypeScript and provides full type safety. All element functions are properly typed with React's element types.
 
+**Important**: When creating function components with this library, use `DOMFC` instead of `React.FC` for better type safety and consistency with the function-based API.
+
 ## Performance
 
 This library is optimized for performance:
@@ -439,7 +626,6 @@ This library is optimized for performance:
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
 
 ## License
 
